@@ -1,38 +1,44 @@
 package in.neuw.oauth2.client;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import in.neuw.oauth2.client.dto.BarrierRequestDto;
+import in.neuw.oauth2.client.dto.BarrierResponseDto;
+import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 /**
  * @author Karanbir Singh on 07/18/2020
  */
-@Service
+@Slf4j
+@AllArgsConstructor
 public class TestClientService {
 
-    @Autowired
     private WebClient testWebClient;
 
-    @Value("${test.client.test.path}")
-    private String testPath;
+    public Mono<BarrierResponseDto> getTestMessage(BarrierRequestDto supplierPartIds) throws JsonProcessingException {
 
-    private String welcome = "Welcome";
+      ObjectMapper mapper = new ObjectMapper();
+      String ss =  mapper.writeValueAsString(supplierPartIds);
+      System.out.println(ss);
 
-    public Mono<Object> getTestMessage(String name) {
-        if (StringUtils.isEmpty(name)) {
-            name = "User";
-        }
-        String message = welcome +" "+ name;
+        BarrierResponseDto resp = testWebClient.put()
+            .uri("/barriers/")
+            .contentType(MediaType.APPLICATION_JSON)
+            .header("Accept", "*/*")
+            .body(Mono.just(supplierPartIds), BarrierRequestDto.class)
+            .retrieve()
+            .bodyToMono(BarrierResponseDto.class)
+            .log()
+            .block();
 
-        return testWebClient
-                .get()
-                .uri(t -> t.queryParam("message", message).path(testPath).build())
-                .exchange()
-                .flatMap(r -> r.bodyToMono(Object.class));
+        return Mono.empty();
     }
-
-
 }

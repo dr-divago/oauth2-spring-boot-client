@@ -1,0 +1,21 @@
+server:
+  port: 8533
+
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          composite:
+            authorization-grant-type: client_credentials
+            client-id: 3bjEKCBuNugEYao5i-UaoA
+            client-secret: 2XIcHhErGYw0j4q56e72d7LyZN-QYG1ZCmiRVRSRNKwgrC-4EXIEQzJbO7d4QXuXCzQFvEJRN_iA1q_HY-6lrw
+        provider:
+          composite:
+            token-uri: https://sso.auth.wayfair.com/oauth/token
+
+test:
+  client:
+    host: https://kube-catalog-composites-identification-api.service.intraiad1.consul.csnzoo.com/
+    base:
+      url: ${test.client.host}

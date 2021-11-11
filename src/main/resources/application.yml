@@ -1,0 +1,21 @@
+server:
+  port: 8534
+
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          composite:
+            authorization-grant-type: client_credentials
+            client-id: J50sS8FT3Ks8RhPzV88MjA
+            client-secret: GItk23IvDpM5UMmOTs1yy9F5sIhoz5trXdossnevCilViTqeO87xgEQzuQPYtR7CuofMVVLeJesUGR152xl7Eg
+        provider:
+          composite:
+            token-uri: https://ssoauthwayfaircom.csnzoo.com/oauth/token
+
+test:
+  client:
+    host: http://kube-barrier-platform.service.intradsm1.sdeconsul.csnzoo.com
+    base:
+      url: ${test.client.host}
